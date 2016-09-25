@@ -14,6 +14,7 @@ int cd(char* inp)
     if(inp[1]=='/')
     {
       strcpy(path,getenv("HOME"));
+      strcat(path,"/");
       strcat(path,inp+2);
     }
     else if(inp[1]!='\0'){
@@ -27,6 +28,7 @@ int cd(char* inp)
   int status = chdir(path);
   if(status!=0)
   {
+    // printf("%s\n", path);
     printf("Cannot change directory to : %s\n",inp );
     return 0;
   }
