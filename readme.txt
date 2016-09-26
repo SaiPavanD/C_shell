@@ -17,7 +17,7 @@ Bugs:
 When exiting the shell using ctrl+D, it gives seg fault
 
 TODO:
-mulit-commands
+mulit-commands (Done)
 background processes
 piping
 redirection
