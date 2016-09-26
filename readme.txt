@@ -21,3 +21,16 @@ mulit-commands
 background processes
 piping
 redirection
+
+##################################################################################################################################################
+Fundaes for piping:
+Basically for piping what we need to do is, the output of the first process should be input to the second process.
+First use the pipe() system call -- pipe() creates a pair of file descriptors, pointing to a pipe inode, and places them in the array pointed to by 'fd'. fd[0] is for reading, fd[1] is for writing. This is before forking. And, fd[] should have been declared as an int array of size 2 before.
+Then fork the process. Each process will now have its own copy of fd[0] and fd[1].
+
+Now, in the child process you need to close the write end of the file. So use 'close(fd[1])'.
+
+In the parent close the read end of the file using 'close(fd[0])'.
+
+Then use the read system call in the child to read(i.e input) and write system call in the parent to write (i.e. output). Go through documentation for that.
+##################################################################################################################################################
