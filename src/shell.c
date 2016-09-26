@@ -15,9 +15,9 @@
 // #define WORD_SIZE 100
 
 int main(int argc, char const *argv[]) {
-  int childPid, status;
+  int childPid, status,i=0;
   char *cmdLine;
-  char **cmd;
+  char ***cmd;
   char sysPath[100];
   char* printPromptStr;
 
@@ -28,33 +28,40 @@ int main(int argc, char const *argv[]) {
 
     cmdLine = readline(printPromptStr);
     // printf("cmdline = %s\n", cmdLine);
-    cmd = parse(cmdLine);
+    cmd = parseMulti(cmdLine);
     // printf("cmd[0] = %s\n", cmd[0]);
-    if(cmd[0]==NULL) continue;
 
-    if(strcmp(cmd[0],"cd")==0)
+    for(i=0;cmd[i]!=NULL;i++)
     {
-      cd(cmd[1]);
-    }
-    else
-    {
-      childPid = fork();
-      if(childPid==0)
+      // int j=0;
+      // for(j=0;cmd[i][j]!=NULL;j++)  printf("%s",cmd[i][j] );
+
+      if(cmd[i][0]==NULL) continue;
+
+      if(strcmp(cmd[i][0],"cd")==0)
       {
-        sysPath[0]='\0';
-        strcat(sysPath,"/bin/");
-        strcat(sysPath,cmd[0]);
-        execv(sysPath,cmd);
-        // If binary is not there in /bin, try /usr/bin
-        sysPath[0]='\0';
-        strcat(sysPath,"/usr/bin/");
-        strcat(sysPath,cmd[0]);
-        execv(sysPath,cmd);
-        printf("Error executing command\n");
+        cd(cmd[i][1]);
       }
       else
       {
-          waitpid(childPid,&status,0);
+        childPid = fork();
+        if(childPid==0)
+        {
+          sysPath[0]='\0';
+          strcat(sysPath,"/bin/");
+          strcat(sysPath,cmd[i][0]);
+          execv(sysPath,cmd[i]);
+          // If binary is not there in /bin, try /usr/bin
+          sysPath[0]='\0';
+          strcat(sysPath,"/usr/bin/");
+          strcat(sysPath,cmd[i][0]);
+          execv(sysPath,cmd[i]);
+          printf("Error executing command\n");
+        }
+        else
+        {
+            waitpid(childPid,&status,0);
+        }
       }
     }
 

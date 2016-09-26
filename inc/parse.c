@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// #define size 1024
+#define size 1024
 
 char** parse(char *inp)
 {
@@ -42,6 +42,51 @@ char** parse(char *inp)
   // for(i=0;i<=numWords;i++)
   // {
   //   printf("%s\n",ret[i] );
+  // }
+
+  return ret;
+}
+
+char*** parseMulti(char *inp)
+{
+  int i=0,numLines=1,n=strlen(inp),j=0,k=0;
+  char temp[size];
+  for(i=0;i<n;i++)
+  {
+    if(inp[i]==';')
+      numLines++;
+  }
+  // printf("%d\n",numLines );
+  char ***ret = (char***)malloc((numLines+1)*sizeof(char**));
+  for(i=0;i<=numLines;i++)
+  {
+    ret[i]=NULL;
+  }
+  for(i=0;i<n;i++)
+  {
+    if(inp[i]!=';')
+    {
+      temp[j]=inp[i];
+      j++;
+    }
+    else
+    {
+      temp[j]='\0';
+      j=0;
+      ret[k]=parse(temp);
+      k++;
+    }
+  }
+  temp[j]='\0';
+  ret[k]=parse(temp);
+
+  // for(j=0;j<=numLines;j++)
+  // {
+  //   for(i=0;ret[j][i]!=NULL;i++)
+  //   {
+  //     printf("%s ",ret[j][i] );
+  //   }
+  //   printf("\n");
   // }
 
   return ret;
