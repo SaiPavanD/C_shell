@@ -45,11 +45,15 @@ int main(int argc, char const *argv[]) {
         strcat(sysPath,"/bin/");
         strcat(sysPath,cmd[0]);
         execv(sysPath,cmd);
+        // If binary is not there in /bin, try /usr/bin
+        sysPath[0]='\0';
+        strcat(sysPath,"/usr/bin/");
+        strcat(sysPath,cmd[0]);
+        execv(sysPath,cmd);
         printf("Error executing command\n");
       }
       else
       {
-
           waitpid(childPid,&status,0);
       }
     }

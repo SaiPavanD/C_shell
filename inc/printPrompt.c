@@ -7,10 +7,12 @@
 
 char* printPrompt()
 {
-  char cwd[1024];
+  char cwd[1024],username[50],hostname[50];
   char *ret=(char*)malloc(2*size*sizeof(char));
+  strcpy(username,getenv("USERNAME"));
+  gethostname(hostname,50);
   getcwd(cwd,sizeof(cwd));
-  sprintf(ret, "username @ pcname : %s $ ",cwd);
+  sprintf(ret, "%s @ %s : %s $ ",username,hostname,cwd);
   return ret;
 }
 
