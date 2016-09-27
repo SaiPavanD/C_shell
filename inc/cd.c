@@ -8,23 +8,32 @@
 int cd(char* inp)
 {
   char path[size];
-  if(inp[0]!='~') strcpy(path,inp);
+
+  if(inp==NULL)
+  {
+    strcpy(path,getenv("HOME"));
+  }
   else
   {
-    if(inp[1]=='/')
+    if(inp[0]!='~') strcpy(path,inp);
+    else
     {
-      strcpy(path,getenv("HOME"));
-      strcat(path,"/");
-      strcat(path,inp+2);
-    }
-    else if(inp[1]!='\0'){
-      strcpy(path,"/home/");
-      strcat(path,inp+1);
-    }
-    else{
-      strcpy(path,getenv("HOME"));
+      if(inp[1]=='/')
+      {
+        strcpy(path,getenv("HOME"));
+        strcat(path,"/");
+        strcat(path,inp+2);
+      }
+      else if(inp[1]!='\0'){
+        strcpy(path,"/home/");
+        strcat(path,inp+1);
+      }
+      else{
+        strcpy(path,getenv("HOME"));
+      }
     }
   }
+
   int status = chdir(path);
   if(status!=0)
   {
