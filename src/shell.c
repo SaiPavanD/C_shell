@@ -42,6 +42,10 @@ int main(int argc, char const *argv[]) {
       {
         cd(cmd[i][1]);
       }
+      else if(strcmp(cmd[i][0],"exit")==0)
+      {
+        return 0;
+      }
       else
       {
         childPid = fork();
