@@ -44,6 +44,27 @@ int cd(char* inp)
   else return 1;
 }
 
+void lsb()
+{
+  //yet to implement
+  return;
+}
+
+int isInbuilt(char* inp)
+{
+  if(strcmp(inp,"cd")==0) return 1;
+  if(strcmp(inp,"exit")==0) return 1;
+  if(strcmp(inp,"lsb")==0) return 1;
+  return 0;
+}
+
+void execInbuilt(char **inp)
+{
+  if(strcmp(inp[0],"cd")==0)  cd(inp[1]);
+  if(strcmp(inp[0],"exit")==0) exit(0);
+  if(strcmp(inp[0],"lsb")==0) lsb();
+  return;
+}
 // int main(int argc, char *argv[]) {
 //   char cwd[size];
 //   cd(argv[1]);

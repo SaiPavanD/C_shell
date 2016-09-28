@@ -22,6 +22,9 @@ background processes
 piping
 redirection
 
+Doubts:
+when execvp fails, have to manually exit(0) from child process. (Cleared) 
+
 ##################################################################################################################################################
 Fundaes for piping:
 Basically for piping what we need to do is, the output of the first process should be input to the second process.

@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include "../inc/cd.c"
+#include "../inc/inbuiltCommands.c"
 #include "../inc/printPrompt.c"
 #include "../inc/parse.c"
 
@@ -18,7 +18,7 @@ int main(int argc, char const *argv[]) {
   int childPid, status,i=0;
   char *cmdLine;
   char ***cmd;
-  char sysPath[100];
+  // char sysPath[100];
   char* printPromptStr;
 
 
@@ -38,29 +38,26 @@ int main(int argc, char const *argv[]) {
 
       if(cmd[i][0]==NULL) continue;
 
-      if(strcmp(cmd[i][0],"cd")==0)
+      if(isInbuilt(cmd[i][0]))
       {
-        cd(cmd[i][1]);
-      }
-      else if(strcmp(cmd[i][0],"exit")==0)
-      {
-        return 0;
+        execInbuilt(cmd[i]);
       }
       else
       {
         childPid = fork();
         if(childPid==0)
         {
-          sysPath[0]='\0';
-          strcat(sysPath,"/bin/");
-          strcat(sysPath,cmd[i][0]);
-          execv(sysPath,cmd[i]);
+          // sysPath[0]='\0';
+          // strcat(sysPath,"/bin/");
+          // strcat(sysPath,cmd[i][0]);
+          execvp(cmd[i][0],cmd[i]);
           // If binary is not there in /bin, try /usr/bin
-          sysPath[0]='\0';
-          strcat(sysPath,"/usr/bin/");
-          strcat(sysPath,cmd[i][0]);
-          execv(sysPath,cmd[i]);
+          // sysPath[0]='\0';
+          // strcat(sysPath,"/usr/bin/");
+          // strcat(sysPath,cmd[i][0]);
+          // execv(sysPath,cmd[i]);
           printf("Error executing command\n");
+          exit(0);
         }
         else
         {
