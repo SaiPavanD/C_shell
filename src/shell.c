@@ -15,7 +15,7 @@
 // #define WORD_SIZE 100
 
 int main(int argc, char const *argv[]) {
-  int childPid, status,i=0;
+  int childPid, status,i=0,isBG=0;
   char *cmdLine;
   char ***cmd;
   // char sysPath[100];
@@ -44,12 +44,20 @@ int main(int argc, char const *argv[]) {
       }
       else
       {
+        isBG=0;
+        if(hasAmpersand(cmd[i]))
+        {
+          isBG=1;
+          // printf("hi\n" );
+        }
         childPid = fork();
         if(childPid==0)
         {
           // sysPath[0]='\0';
           // strcat(sysPath,"/bin/");
           // strcat(sysPath,cmd[i][0]);
+
+
           execvp(cmd[i][0],cmd[i]);
           // If binary is not there in /bin, try /usr/bin
           // sysPath[0]='\0';
@@ -61,7 +69,15 @@ int main(int argc, char const *argv[]) {
         }
         else
         {
+          if(!isBG)
+          {
             waitpid(childPid,&status,0);
+          }
+          else
+          {
+            printf("Process %d (cmd : %s) is running in background\n", childPid,cmd[i][0]);
+
+          }
         }
       }
     }

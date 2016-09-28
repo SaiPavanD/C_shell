@@ -92,6 +92,20 @@ char*** parseMulti(char *inp)
   return ret;
 }
 
+int hasAmpersand(char **inp)
+{
+  int i;
+  for(i=0;inp[i]!=NULL;i++)
+  {
+    if(strcmp(inp[i],"&")==0)
+    {
+      inp[i]=NULL;
+      return 1;
+    }
+  }
+  return 0;
+}
+
 // int main(int argc, char *argv[]) {
 //   printPrompt();
 //   chdir("inc");

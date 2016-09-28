@@ -18,12 +18,12 @@ When exiting the shell using ctrl+D, it gives seg fault
 
 TODO:
 mulit-commands (Done)
-background processes
+background processes (run process as background:done . list background process:not done)
 piping
 redirection
 
 Doubts:
-when execvp fails, have to manually exit(0) from child process. (Cleared) 
+when execvp fails, have to manually exit(0) from child process. (Cleared)
 
 ##################################################################################################################################################
 Fundaes for piping:
