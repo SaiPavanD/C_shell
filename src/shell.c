@@ -11,8 +11,15 @@
 #include "../inc/printPrompt.c"
 #include "../inc/parse.c"
 
+#define WORD_SIZE 100
 
-// #define WORD_SIZE 100
+
+// struct BG
+// {
+//   int pid;
+//   char cmd[WORD_SIZE];
+// } BGproc[WORD_SIZE];
+
 
 int main(int argc, char const *argv[]) {
   int childPid, status,i=0,isBG=0;
@@ -20,7 +27,8 @@ int main(int argc, char const *argv[]) {
   char ***cmd;
   // char sysPath[100];
   char* printPromptStr;
-
+  struct BG BGproc[WORD_SIZE];
+  int numBG=0;
 
   while(1)
   {
@@ -40,15 +48,15 @@ int main(int argc, char const *argv[]) {
 
       if(isInbuilt(cmd[i][0]))
       {
-        execInbuilt(cmd[i]);
+        execInbuilt(cmd[i],BGproc,numBG);
       }
       else
       {
         isBG=0;
         if(hasAmpersand(cmd[i]))
         {
-          isBG=1;
           // printf("hi\n" );
+          isBG=1;
         }
         childPid = fork();
         if(childPid==0)
@@ -76,7 +84,9 @@ int main(int argc, char const *argv[]) {
           else
           {
             printf("Process %d (cmd : %s) is running in background\n", childPid,cmd[i][0]);
-
+            BGproc[numBG].pid=childPid;
+            strcpy(BGproc[numBG].cmd,cmd[i][0]);
+            numBG++;
           }
         }
       }

@@ -2,8 +2,17 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <wait.h>
 
 #define size 1024
+#define WORD_SIZE 100
+
+struct BG
+{
+  int pid;
+  char cmd[WORD_SIZE];
+};
 
 int cd(char* inp)
 {
@@ -44,9 +53,19 @@ int cd(char* inp)
   else return 1;
 }
 
-void lsb()
+void lsb(struct BG *BGproc,int numBG)
 {
-  //yet to implement
+  int i=0,status;
+  printf("PID\t\tCommand\t\tStatus\n");
+  for(i=0;i<numBG;i++)
+  {
+    if(waitpid(BGproc[i].pid,&status,WNOHANG)==0){
+      printf("%d\t\t%s\t\tRunning\n",BGproc[i].pid, BGproc[i].cmd );
+    }
+    else{
+      printf("%d\t\t%s\t\tExited\n",BGproc[i].pid, BGproc[i].cmd );
+    }
+  }
   return;
 }
 
@@ -58,11 +77,11 @@ int isInbuilt(char* inp)
   return 0;
 }
 
-void execInbuilt(char **inp)
+void execInbuilt(char **inp,struct BG *BGproc,int numBG)
 {
   if(strcmp(inp[0],"cd")==0)  cd(inp[1]);
   if(strcmp(inp[0],"exit")==0) exit(0);
-  if(strcmp(inp[0],"lsb")==0) lsb();
+  if(strcmp(inp[0],"lsb")==0) lsb(BGproc,numBG);
   return;
 }
 // int main(int argc, char *argv[]) {

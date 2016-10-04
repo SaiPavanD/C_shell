@@ -18,7 +18,7 @@ When exiting the shell using ctrl+D, it gives seg fault
 
 TODO:
 mulit-commands (Done)
-background processes (run process as background:done . list background process:not done)
+background processes and list background Process (done)
 piping
 redirection
 
