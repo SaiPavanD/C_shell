@@ -5,7 +5,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #include "../inc/inbuiltCommands.c"
 #include "../inc/printPrompt.c"
@@ -23,12 +25,15 @@
 
 int main(int argc, char const *argv[]) {
   int childPid, status,i=0,isBG=0;
-  char *cmdLine;
+  char *cmdLine , inPath[WORD_SIZE], outPath[WORD_SIZE];
   char ***cmd;
   // char sysPath[100];
   char* printPromptStr;
   struct BG BGproc[WORD_SIZE];
   int numBG=0;
+
+  inPath[0]='\0';
+  outPath[0]='\0';
 
   while(1)
   {
@@ -67,7 +72,25 @@ int main(int argc, char const *argv[]) {
           // sysPath[0]='\0';
           // strcat(sysPath,"/bin/");
           // strcat(sysPath,cmd[i][0]);
+          parseRedir(cmd[i],inPath,outPath);
 
+          if(strlen(inPath)>0)
+          {
+            close(0);
+            open(inPath,O_RDONLY );
+          }
+
+          if(strlen(outPath)>0)
+          {
+            close(1);
+            open(outPath,O_RDWR | O_CREAT | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+          }
+
+          if(isBG)
+          {
+            close(1);
+            open("background_processes_output.txt",O_RDWR | O_CREAT | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+          }
 
           execvp(cmd[i][0],cmd[i]);
           // If binary is not there in /bin, try /usr/bin

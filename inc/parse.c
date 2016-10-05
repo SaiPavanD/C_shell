@@ -106,6 +106,71 @@ int hasAmpersand(char **inp)
   return 0;
 }
 
+int parseRedir(char** inp, char* inPath, char* outPath){
+  int i,j;
+  for(i=0;inp[i]!=NULL;i++)
+  {
+    if(strcmp(inp[i],"<")==0 && inp[i+1]!=NULL)
+    {
+      strcpy(inPath,inp[i+1]);
+      for(j=i;inp[j+2]!=NULL;j++)
+      {
+        strcpy(inp[j],inp[j+2]);
+      }
+      inp[j++]=NULL;
+      inp[j++]=NULL;
+      break;
+    }
+    if(inp[i][0]=='<')
+    {
+      strcpy(inPath,inp[i]+1);
+      for(j=i;inp[j+1]!=NULL;j++)
+      {
+        strcpy(inp[j],inp[j+1]);
+      }
+      inp[j++]=NULL;
+      break;
+    }
+  }
+  // printf("\n" );
+  // for(i=0;inp[i]!=NULL;i++)
+  // {
+  //   printf("%s ", inp[i]);
+  // }
+  // printf("\n" );
+  for(i=0;inp[i]!=NULL;i++)
+  {
+    if(strcmp(inp[i],">")==0 && inp[i+1]!=NULL)
+    {
+      strcpy(outPath,inp[i+1]);
+      for(j=i;inp[j+2]!=NULL;j++)
+      {
+        strcpy(inp[j],inp[j+2]);
+      }
+      inp[j++]=NULL;
+      inp[j++]=NULL;
+      break;
+    }
+    if(inp[i][0]=='>')
+    {
+      strcpy(outPath,inp[i]+1);
+      for(j=i;inp[j+1]!=NULL;j++)
+      {
+        strcpy(inp[j],inp[j+1]);
+      }
+      inp[j++]=NULL;
+      break;
+    }
+  }
+  // printf("\n" );
+  // for(i=0;inp[i]!=NULL;i++)
+  // {
+  //   printf("%s ", inp[i]);
+  // }
+  // printf("\n" );
+  return 0;
+}
+
 // int main(int argc, char *argv[]) {
 //   printPrompt();
 //   chdir("inc");
