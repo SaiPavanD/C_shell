@@ -84,6 +84,8 @@ int main(int argc, char const *argv[]) {
           {
             close(1);
             open(outPath,O_RDWR | O_CREAT | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+            close(2);
+            open(outPath,O_RDWR | O_CREAT | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
           }
 
           if(isBG)
