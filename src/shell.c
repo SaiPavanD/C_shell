@@ -36,6 +36,9 @@ int main(int argc, char const *argv[]) {
 
     cmdLine = readline(printPromptStr);
     // printf("cmdline = %s\n", cmdLine);
+
+    add_history(cmdLine);
+
     cmd = parseMulti(cmdLine);
     // printf("cmd[0] = %s\n", cmd[0]);
 
