@@ -74,18 +74,28 @@ int main(int argc, char const *argv[]) {
           // strcat(sysPath,cmd[i][0]);
           parseRedir(cmd[i],inPath,outPath);
 
-          if(strlen(inPath)>0)
-          {
-            close(0);
-            open(inPath,O_RDONLY );
-          }
-
           if(strlen(outPath)>0)
           {
             close(1);
             open(outPath,O_RDWR | O_CREAT | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
             close(2);
             open(outPath,O_RDWR | O_CREAT | O_APPEND, S_IRWXU | S_IRWXG | S_IRWXO);
+          }
+
+          if(strlen(inPath)>0)
+          {
+            FILE *fp=fopen(inPath,"r");
+            if(fp!=NULL)
+            {
+              close(0);
+              open(inPath,O_RDONLY);
+              fclose(fp);
+            }
+            else
+            {
+              printf("Cannot open file : %s\n", inPath);
+              exit(0);
+            }
           }
 
           if(isBG)

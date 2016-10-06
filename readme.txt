@@ -15,12 +15,13 @@ Run make to build and execute
 
 Bugs:
 When exiting the shell using ctrl+D, it gives seg fault
+sort <a.txt >b.txt - if a.txt is not present, error is not getting printed to b.txt (fixed)
 
 TODO:
 mulit-commands (Done)
 background processes and list background Process (done)
 piping
-redirection
+redirection (done)
 
 Doubts:
 when execvp fails, have to manually exit(0) from child process. (Cleared)

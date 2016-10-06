@@ -1,2 +1,4 @@
+!readme.txt
 *.out
 /temp
+*.txt
