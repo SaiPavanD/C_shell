@@ -47,7 +47,7 @@ char** parse(char *inp)
   return ret;
 }
 
-char*** parseMulti(char *inp)
+char*** parseMulti(char *inp, int *isPipe)
 {
   int i=0,numLines=1,n=strlen(inp),j=0,k=0;
   char temp[size];
@@ -55,6 +55,8 @@ char*** parseMulti(char *inp)
   {
     if(inp[i]==';')
       numLines++;
+    if(inp[i]=='|')
+      isPipe[numLines++]=1;
   }
   // printf("%d\n",numLines );
   char ***ret = (char***)malloc((numLines+1)*sizeof(char**));
@@ -64,7 +66,7 @@ char*** parseMulti(char *inp)
   }
   for(i=0;i<n;i++)
   {
-    if(inp[i]!=';')
+    if(inp[i]!=';' && inp[i]!='|')
     {
       temp[j]=inp[i];
       j++;
@@ -169,6 +171,13 @@ int parseRedir(char** inp, char* inPath, char* outPath){
   // }
   // printf("\n" );
   return 0;
+}
+
+void setZero(int *arr, int n)
+{
+  int i;
+  for(i=0; i<n;i++) arr[i] = 0;
+  return;
 }
 
 // int main(int argc, char *argv[]) {

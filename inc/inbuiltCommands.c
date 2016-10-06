@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <signal.h>
 #include <wait.h>
 
 #define size 1024
@@ -77,7 +78,7 @@ int isInbuilt(char* inp)
   return 0;
 }
 
-void execInbuilt(char **inp,struct BG *BGproc,int numBG)
+void execInbuilt(char **inp, struct BG* BGproc, int numBG)
 {
   if(strcmp(inp[0],"cd")==0)  cd(inp[1]);
   if(strcmp(inp[0],"exit")==0) exit(0);

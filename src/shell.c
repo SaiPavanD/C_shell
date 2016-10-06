@@ -15,25 +15,17 @@
 
 #define WORD_SIZE 100
 
-
-// struct BG
-// {
-//   int pid;
-//   char cmd[WORD_SIZE];
-// } BGproc[WORD_SIZE];
-
-
 int main(int argc, char const *argv[]) {
-  int childPid, status,i=0,isBG=0;
+  int childPid, status,i=0,isBG=0, numBG=0, isPipe[WORD_SIZE];
   char *cmdLine , inPath[WORD_SIZE], outPath[WORD_SIZE];
   char ***cmd;
-  // char sysPath[100];
   char* printPromptStr;
   struct BG BGproc[WORD_SIZE];
-  int numBG=0;
 
   inPath[0]='\0';
   outPath[0]='\0';
+
+  int fd[2],fd_old_in=0;
 
   while(1)
   {
@@ -44,7 +36,8 @@ int main(int argc, char const *argv[]) {
 
     add_history(cmdLine);
 
-    cmd = parseMulti(cmdLine);
+    setZero(isPipe,WORD_SIZE);
+    cmd = parseMulti(cmdLine, isPipe);
     // printf("cmd[0] = %s\n", cmd[0]);
 
     for(i=0;cmd[i]!=NULL;i++)
@@ -56,7 +49,7 @@ int main(int argc, char const *argv[]) {
 
       if(isInbuilt(cmd[i][0]))
       {
-        execInbuilt(cmd[i],BGproc,numBG);
+        execInbuilt(cmd[i], BGproc, numBG);
       }
       else
       {
@@ -66,12 +59,19 @@ int main(int argc, char const *argv[]) {
           // printf("hi\n" );
           isBG=1;
         }
+        if(isPipe[i+1])pipe(fd);
+
         childPid = fork();
+
         if(childPid==0)
         {
-          // sysPath[0]='\0';
-          // strcat(sysPath,"/bin/");
-          // strcat(sysPath,cmd[i][0]);
+          if(isPipe[i])
+          {
+            dup2(fd_old_in,0);
+            close(fd[0]);
+          }
+          if(isPipe[i+1])  dup2(fd[1],1);
+
           parseRedir(cmd[i],inPath,outPath);
 
           if(strlen(outPath)>0)
@@ -105,12 +105,8 @@ int main(int argc, char const *argv[]) {
           }
 
           execvp(cmd[i][0],cmd[i]);
-          // If binary is not there in /bin, try /usr/bin
-          // sysPath[0]='\0';
-          // strcat(sysPath,"/usr/bin/");
-          // strcat(sysPath,cmd[i][0]);
-          // execv(sysPath,cmd[i]);
-          printf("Error executing command\n");
+
+          printf("Couldn't execute command : %s\n",cmd[i][0]);
           exit(0);
         }
         else
@@ -125,6 +121,11 @@ int main(int argc, char const *argv[]) {
             BGproc[numBG].pid=childPid;
             strcpy(BGproc[numBG].cmd,cmd[i][0]);
             numBG++;
+          }
+          if(isPipe[i+1])
+          {
+            close(fd[1]);
+            fd_old_in=fd[0];
           }
         }
       }

@@ -12,7 +12,7 @@ char* printPrompt()
   strcpy(username,getenv("USERNAME"));
   gethostname(hostname,50);
   getcwd(cwd,sizeof(cwd));
-  sprintf(ret, "%s @ %s : %s $ ",username,hostname,cwd);
+  sprintf(ret, "%s @ %s : %s # ",username,hostname,cwd);
   return ret;
 }
 
